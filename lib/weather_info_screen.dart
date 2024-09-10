@@ -13,33 +13,35 @@ class WeatherInfoScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const Spacer(),
-            Column(children: [
-              const AspectRatio(
-                aspectRatio: 1,
-                child: Placeholder(),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 16, bottom: 16),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Text(
-                        '** ℃',
-                        textAlign: TextAlign.center,
-                        style: labelLargeStyle?.copyWith(color: Colors.blue),
-                      ),
-                    ),
-                    Expanded(
-                      child: Text(
-                        '** ℃',
-                        textAlign: TextAlign.center,
-                        style: labelLargeStyle?.copyWith(color: Colors.red),
-                      ),
-                    ),
-                  ],
+            Column(
+              children: [
+                const AspectRatio(
+                  aspectRatio: 1,
+                  child: Placeholder(),
                 ),
-              ),
-            ]),
+                Padding(
+                  padding: const EdgeInsets.only(top: 16, bottom: 16),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          '** ℃',
+                          textAlign: TextAlign.center,
+                          style: labelLargeStyle?.copyWith(color: Colors.blue),
+                        ),
+                      ),
+                      Expanded(
+                        child: Text(
+                          '** ℃',
+                          textAlign: TextAlign.center,
+                          style: labelLargeStyle?.copyWith(color: Colors.red),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
             Expanded(
               child: Column(
                 children: [
