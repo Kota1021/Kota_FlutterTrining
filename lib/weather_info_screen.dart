@@ -19,19 +19,19 @@ class WeatherInfoScreen extends StatelessWidget {
                 child: Placeholder(),
               ),
               Padding(
-                padding: EdgeInsets.only(top: 16, bottom: 16),
+                padding: const EdgeInsets.only(top: 16, bottom: 16),
                 child: Row(
                   children: [
                     Expanded(
                       child: Text(
-                        '**℃',
+                        '** ℃',
                         textAlign: TextAlign.center,
                         style: labelLargeStyle?.copyWith(color: Colors.blue),
                       ),
                     ),
                     Expanded(
                       child: Text(
-                        '**℃',
+                        '** ℃',
                         textAlign: TextAlign.center,
                         style: labelLargeStyle?.copyWith(color: Colors.red),
                       ),
