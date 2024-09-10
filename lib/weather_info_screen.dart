@@ -41,27 +41,34 @@ class WeatherInfoScreen extends StatelessWidget {
               ),
             ]),
             Expanded(
-              child: Row(
+              child: Column(
                 children: [
-                  Expanded(
-                    child: TextButton(
-                      onPressed: () {},
-                      child: Text(
-                        'Close',
-                        textAlign: TextAlign.center,
-                        style: labelLargeStyle?.copyWith(color: Colors.blue),
+                  const SizedBox(height: 80),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: TextButton(
+                          onPressed: () {},
+                          child: Text(
+                            'Close',
+                            textAlign: TextAlign.center,
+                            style:
+                                labelLargeStyle?.copyWith(color: Colors.blue),
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                  Expanded(
-                    child: TextButton(
-                      onPressed: () {},
-                      child: Text(
-                        'Reload',
-                        textAlign: TextAlign.center,
-                        style: labelLargeStyle?.copyWith(color: Colors.blue),
+                      Expanded(
+                        child: TextButton(
+                          onPressed: () {},
+                          child: Text(
+                            'Reload',
+                            textAlign: TextAlign.center,
+                            style:
+                                labelLargeStyle?.copyWith(color: Colors.blue),
+                          ),
+                        ),
                       ),
-                    ),
+                    ],
                   ),
                 ],
               ),
