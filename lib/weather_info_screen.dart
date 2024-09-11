@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_training/weather_condition_panel.dart';
 import 'package:flutter_training/weather_kind.dart';
 import 'package:yumemi_weather/yumemi_weather.dart';
 
@@ -10,8 +11,8 @@ class WeatherInfoScreen extends StatefulWidget {
 }
 
 class _WeatherInfoScreenState extends State<WeatherInfoScreen> {
-  final YumemiWeather yumemiWeather = YumemiWeather();
-  WeatherKind? weatherKind;
+  final YumemiWeather _yumemiWeather = YumemiWeather();
+  WeatherKind? _weatherKind;
 
   @override
   Widget build(BuildContext context) {
@@ -22,34 +23,9 @@ class _WeatherInfoScreenState extends State<WeatherInfoScreen> {
         child: Column(
           children: [
             const Spacer(),
-            Column(
-              children: [
-                AspectRatio(
-                  aspectRatio: 1,
-                  child: weatherKind?.svgImage ?? const Placeholder(),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Text(
-                          '** ℃',
-                          textAlign: TextAlign.center,
-                          style: labelLargeStyle?.copyWith(color: Colors.blue),
-                        ),
-                      ),
-                      Expanded(
-                        child: Text(
-                          '** ℃',
-                          textAlign: TextAlign.center,
-                          style: labelLargeStyle?.copyWith(color: Colors.red),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
+            WeatherConditionPanel(
+              weatherKind: _weatherKind,
+              labelLargeStyle: labelLargeStyle,
             ),
             Expanded(
               child: Column(
@@ -71,9 +47,9 @@ class _WeatherInfoScreenState extends State<WeatherInfoScreen> {
                       Expanded(
                         child: TextButton(
                           onPressed: () {
-                            final name = yumemiWeather.fetchSimpleWeather();
+                            final name = _yumemiWeather.fetchSimpleWeather();
                             setState(() {
-                              weatherKind = WeatherKind.values.byName(name);
+                              _weatherKind = WeatherKind.values.byName(name);
                             });
                           },
                           child: Text(
