@@ -1,7 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_training/weather_kind.dart';
+import 'package:yumemi_weather/yumemi_weather.dart';
 
-class WeatherInfoScreen extends StatelessWidget {
+class WeatherInfoScreen extends StatefulWidget {
   const WeatherInfoScreen({super.key});
+
+  @override
+  State<WeatherInfoScreen> createState() => _WeatherInfoScreenState();
+}
+
+class _WeatherInfoScreenState extends State<WeatherInfoScreen> {
+  final YumemiWeather yumemiWeather = YumemiWeather();
+  WeatherKind? weatherKind;
 
   @override
   Widget build(BuildContext context) {
@@ -14,9 +24,9 @@ class WeatherInfoScreen extends StatelessWidget {
             const Spacer(),
             Column(
               children: [
-                const AspectRatio(
+                AspectRatio(
                   aspectRatio: 1,
-                  child: Placeholder(),
+                  child: weatherKind?.svgImage ?? const Placeholder(),
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 16),
@@ -60,7 +70,12 @@ class WeatherInfoScreen extends StatelessWidget {
                       ),
                       Expanded(
                         child: TextButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            final name = yumemiWeather.fetchSimpleWeather();
+                            setState(() {
+                              weatherKind = WeatherKind.values.byName(name);
+                            });
+                          },
                           child: Text(
                             'Reload',
                             textAlign: TextAlign.center,
