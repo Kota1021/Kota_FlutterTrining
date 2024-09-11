@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_training/utils/extensions/enum.dart';
 import 'package:flutter_training/weather_condition_panel.dart';
 import 'package:flutter_training/weather_kind.dart';
 import 'package:yumemi_weather/yumemi_weather.dart';
@@ -49,7 +50,8 @@ class _WeatherInfoScreenState extends State<WeatherInfoScreen> {
                           onPressed: () {
                             final name = _yumemiWeather.fetchSimpleWeather();
                             setState(() {
-                              _weatherKind = WeatherKind.values.byName(name);
+                              _weatherKind =
+                                  WeatherKind.values.byNameOrNull(name);
                             });
                           },
                           child: Text(
