@@ -10,7 +10,6 @@ class WeatherInfoScreen extends StatelessWidget {
       child: FractionallySizedBox(
         widthFactor: 0.5,
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const Spacer(),
             Column(
