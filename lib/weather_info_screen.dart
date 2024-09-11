@@ -20,7 +20,7 @@ class WeatherInfoScreen extends StatelessWidget {
                   child: Placeholder(),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(top: 16, bottom: 16),
+                  padding: const EdgeInsets.symmetric(vertical: 16),
                   child: Row(
                     children: [
                       Expanded(
