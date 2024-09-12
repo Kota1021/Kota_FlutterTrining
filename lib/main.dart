@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_training/weather_info_screen.dart';
+import 'package:flutter_training/green_screen.dart';
 
 void main() {
   runApp(const MainApp());
@@ -12,7 +12,7 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return const MaterialApp(
       home: Scaffold(
-        body: WeatherInfoScreen(),
+        body: GreenScreen(),
       ),
     );
   }
