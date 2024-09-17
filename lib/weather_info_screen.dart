@@ -1,6 +1,4 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:flutter_training/green_screen.dart';
 import 'package:flutter_training/utils/extensions/enum.dart';
 import 'package:flutter_training/weather_condition_panel.dart';
 import 'package:flutter_training/weather_kind.dart';
@@ -40,15 +38,7 @@ class _WeatherInfoScreenState extends State<WeatherInfoScreen> {
                         Expanded(
                           child: TextButton(
                             onPressed: () {
-                              unawaited(
-                                Navigator.of(context).push(
-                                  MaterialPageRoute<void>(
-                                    builder: (context) {
-                                      return const GreenScreen();
-                                    },
-                                  ),
-                                ),
-                              );
+                              Navigator.of(context).pop();
                             },
                             child: Text(
                               'Close',
