@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter_training/utils/on_appear_action.dart';
 import 'package:flutter_training/weather_info_screen.dart';
 
 class GreenScreen extends StatefulWidget {
@@ -9,10 +10,9 @@ class GreenScreen extends StatefulWidget {
   State<GreenScreen> createState() => _GreenScreenState();
 }
 
-class _GreenScreenState extends State<GreenScreen> {
+class _GreenScreenState extends State<GreenScreen> with OnAppearAction {
   @override
-  void initState() {
-    super.initState();
+  void onAppear() {
     unawaited(
       WidgetsBinding.instance.endOfFrame.then((_) {
         navigateToWeatherScreen();
