@@ -1,7 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_training/utils/extensions/enum.dart';
+import 'package:flutter_training/weather_condition_panel.dart';
+import 'package:flutter_training/weather_kind.dart';
+import 'package:yumemi_weather/yumemi_weather.dart';
 
-class WeatherInfoScreen extends StatelessWidget {
+class WeatherInfoScreen extends StatefulWidget {
   const WeatherInfoScreen({super.key});
+
+  @override
+  State<WeatherInfoScreen> createState() => _WeatherInfoScreenState();
+}
+
+class _WeatherInfoScreenState extends State<WeatherInfoScreen> {
+  final YumemiWeather _yumemiWeather = YumemiWeather();
+  WeatherKind? _weatherKind;
 
   @override
   Widget build(BuildContext context) {
@@ -12,34 +24,9 @@ class WeatherInfoScreen extends StatelessWidget {
         child: Column(
           children: [
             const Spacer(),
-            Column(
-              children: [
-                const AspectRatio(
-                  aspectRatio: 1,
-                  child: Placeholder(),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Text(
-                          '** ℃',
-                          textAlign: TextAlign.center,
-                          style: labelLargeStyle?.copyWith(color: Colors.blue),
-                        ),
-                      ),
-                      Expanded(
-                        child: Text(
-                          '** ℃',
-                          textAlign: TextAlign.center,
-                          style: labelLargeStyle?.copyWith(color: Colors.red),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
+            WeatherConditionPanel(
+              weatherKind: _weatherKind,
+              labelLargeStyle: labelLargeStyle,
             ),
             Expanded(
               child: Column(
@@ -60,7 +47,13 @@ class WeatherInfoScreen extends StatelessWidget {
                       ),
                       Expanded(
                         child: TextButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            final name = _yumemiWeather.fetchSimpleWeather();
+                            setState(() {
+                              _weatherKind =
+                                  WeatherKind.values.byNameOrNull(name);
+                            });
+                          },
                           child: Text(
                             'Reload',
                             textAlign: TextAlign.center,
