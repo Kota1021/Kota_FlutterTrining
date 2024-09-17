@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_training/utils/extensions/enum.dart';
 import 'package:flutter_training/weather_condition_panel.dart';
@@ -14,6 +16,27 @@ class WeatherInfoScreen extends StatefulWidget {
 class _WeatherInfoScreenState extends State<WeatherInfoScreen> {
   final YumemiWeather _yumemiWeather = YumemiWeather();
   WeatherKind? _weatherKind;
+
+  Future<void> _showErrorDialog(String message) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Error occurred'),
+          content: Text(message),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,11 +74,16 @@ class _WeatherInfoScreenState extends State<WeatherInfoScreen> {
                         Expanded(
                           child: TextButton(
                             onPressed: () {
-                              final name = _yumemiWeather.fetchSimpleWeather();
-                              setState(() {
-                                _weatherKind =
-                                    WeatherKind.values.byNameOrNull(name);
-                              });
+                              try {
+                                final name =
+                                    _yumemiWeather.fetchThrowsWeather('tokyo');
+                                setState(() {
+                                  _weatherKind =
+                                      WeatherKind.values.byNameOrNull(name);
+                                });
+                              } on YumemiWeatherError catch (e) {
+                                unawaited(_showErrorDialog(e.toString()));
+                              }
                             },
                             child: Text(
                               'Reload',
