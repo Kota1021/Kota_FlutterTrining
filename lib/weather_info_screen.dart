@@ -1,9 +1,10 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_training/utils/extensions/enum.dart';
+import 'package:flutter_training/utils/weather_request.dart';
+import 'package:flutter_training/utils/weather_response.dart';
 import 'package:flutter_training/weather_condition_panel.dart';
-import 'package:flutter_training/weather_kind.dart';
 import 'package:yumemi_weather/yumemi_weather.dart';
 
 class WeatherInfoScreen extends StatefulWidget {
@@ -15,7 +16,7 @@ class WeatherInfoScreen extends StatefulWidget {
 
 class _WeatherInfoScreenState extends State<WeatherInfoScreen> {
   final YumemiWeather _yumemiWeather = YumemiWeather();
-  WeatherKind? _weatherKind;
+  WeatherResponse? _weatherResponse;
 
   Future<void> _showErrorDialog(String message) async {
     return showDialog<void>(
@@ -49,7 +50,7 @@ class _WeatherInfoScreenState extends State<WeatherInfoScreen> {
             children: [
               const Spacer(),
               WeatherConditionPanel(
-                weatherKind: _weatherKind,
+                weatherResponse: _weatherResponse,
                 labelLargeStyle: labelLargeStyle,
               ),
               Expanded(
@@ -75,13 +76,21 @@ class _WeatherInfoScreenState extends State<WeatherInfoScreen> {
                           child: TextButton(
                             onPressed: () {
                               try {
-                                final name =
-                                    _yumemiWeather.fetchThrowsWeather('tokyo');
+                                final requestJSON = WeatherRequest(
+                                  area: 'tokyo',
+                                  date: DateTime.now(),
+                                ).toJson();
+                                final response = _yumemiWeather
+                                    .fetchWeather(jsonEncode(requestJSON));
                                 setState(() {
-                                  _weatherKind =
-                                      WeatherKind.values.byNameOrNull(name);
+                                  _weatherResponse = WeatherResponse.fromJson(
+                                    jsonDecode(response)
+                                        as Map<String, dynamic>,
+                                  );
                                 });
                               } on YumemiWeatherError catch (e) {
+                                unawaited(_showErrorDialog(e.toString()));
+                              } on FormatException catch (e) {
                                 unawaited(_showErrorDialog(e.toString()));
                               }
                             },
