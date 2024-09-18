@@ -90,6 +90,8 @@ class _WeatherInfoScreenState extends State<WeatherInfoScreen> {
                                 });
                               } on YumemiWeatherError catch (e) {
                                 unawaited(_showErrorDialog(e.toString()));
+                              } on FormatException catch (e) {
+                                unawaited(_showErrorDialog(e.toString()));
                               }
                             },
                             child: Text(
