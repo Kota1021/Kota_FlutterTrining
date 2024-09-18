@@ -18,56 +18,60 @@ class _WeatherInfoScreenState extends State<WeatherInfoScreen> {
   @override
   Widget build(BuildContext context) {
     final labelLargeStyle = Theme.of(context).textTheme.labelLarge;
-    return Center(
-      child: FractionallySizedBox(
-        widthFactor: 0.5,
-        child: Column(
-          children: [
-            const Spacer(),
-            WeatherConditionPanel(
-              weatherKind: _weatherKind,
-              labelLargeStyle: labelLargeStyle,
-            ),
-            Expanded(
-              child: Column(
-                children: [
-                  const SizedBox(height: 80),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: TextButton(
-                          onPressed: () {},
-                          child: Text(
-                            'Close',
-                            textAlign: TextAlign.center,
-                            style:
-                                labelLargeStyle?.copyWith(color: Colors.blue),
-                          ),
-                        ),
-                      ),
-                      Expanded(
-                        child: TextButton(
-                          onPressed: () {
-                            final name = _yumemiWeather.fetchSimpleWeather();
-                            setState(() {
-                              _weatherKind =
-                                  WeatherKind.values.byNameOrNull(name);
-                            });
-                          },
-                          child: Text(
-                            'Reload',
-                            textAlign: TextAlign.center,
-                            style:
-                                labelLargeStyle?.copyWith(color: Colors.blue),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
+    return Scaffold(
+      body: Center(
+        child: FractionallySizedBox(
+          widthFactor: 0.5,
+          child: Column(
+            children: [
+              const Spacer(),
+              WeatherConditionPanel(
+                weatherKind: _weatherKind,
+                labelLargeStyle: labelLargeStyle,
               ),
-            ),
-          ],
+              Expanded(
+                child: Column(
+                  children: [
+                    const SizedBox(height: 80),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                            child: Text(
+                              'Close',
+                              textAlign: TextAlign.center,
+                              style:
+                                  labelLargeStyle?.copyWith(color: Colors.blue),
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: TextButton(
+                            onPressed: () {
+                              final name = _yumemiWeather.fetchSimpleWeather();
+                              setState(() {
+                                _weatherKind =
+                                    WeatherKind.values.byNameOrNull(name);
+                              });
+                            },
+                            child: Text(
+                              'Reload',
+                              textAlign: TextAlign.center,
+                              style:
+                                  labelLargeStyle?.copyWith(color: Colors.blue),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
