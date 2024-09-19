@@ -3,8 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_training/components/weather_condition_panel.dart';
-import 'package:flutter_training/utils/providers.dart';
-import 'package:yumemi_weather/yumemi_weather.dart';
+import 'package:flutter_training/screens/weather_info/notifier/weather_response_notifier.dart';
 
 class WeatherInfoScreen extends ConsumerWidget {
   const WeatherInfoScreen({super.key});
@@ -68,27 +67,20 @@ class WeatherInfoScreen extends ConsumerWidget {
                         Expanded(
                           child: TextButton(
                             onPressed: () {
-                              try {
-                                ref
-                                    .read(
-                                      weatherResponseNotifierProvider.notifier,
-                                    )
-                                    .fetch();
-                              } on YumemiWeatherError catch (e) {
-                                unawaited(
-                                  _showErrorDialog(
-                                    context,
-                                    e.toString(),
-                                  ),
-                                );
-                              } on FormatException catch (e) {
-                                unawaited(
-                                  _showErrorDialog(
-                                    context,
-                                    e.toString(),
-                                  ),
-                                );
-                              }
+                              ref
+                                  .read(
+                                weatherResponseNotifierProvider.notifier,
+                              )
+                                  .fetch(
+                                onError: (errorDescription) {
+                                  unawaited(
+                                    _showErrorDialog(
+                                      context,
+                                      errorDescription,
+                                    ),
+                                  );
+                                },
+                              );
                             },
                             child: Text(
                               'Reload',

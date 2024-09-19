@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_training/screens/weather_info/weather_info_screen.dart';
 import 'package:flutter_training/utils/on_appear_action.dart';
-import 'package:flutter_training/weather_info_screen.dart';
 
 class GreenScreen extends StatefulWidget {
   const GreenScreen({super.key});
