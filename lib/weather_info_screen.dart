@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_training/components/weather_condition_panel.dart';
 import 'package:flutter_training/utils/providers.dart';
-import 'package:flutter_training/weather_condition_panel.dart';
 import 'package:yumemi_weather/yumemi_weather.dart';
 
 class WeatherInfoScreen extends ConsumerWidget {
