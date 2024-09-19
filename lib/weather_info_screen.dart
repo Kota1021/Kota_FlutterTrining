@@ -1,24 +1,15 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_training/utils/weather_request.dart';
-import 'package:flutter_training/utils/weather_response.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_training/utils/providers.dart';
 import 'package:flutter_training/weather_condition_panel.dart';
 import 'package:yumemi_weather/yumemi_weather.dart';
 
-class WeatherInfoScreen extends StatefulWidget {
+class WeatherInfoScreen extends ConsumerWidget {
   const WeatherInfoScreen({super.key});
 
-  @override
-  State<WeatherInfoScreen> createState() => _WeatherInfoScreenState();
-}
-
-class _WeatherInfoScreenState extends State<WeatherInfoScreen> {
-  final YumemiWeather _yumemiWeather = YumemiWeather();
-  WeatherResponse? _weatherResponse;
-
-  Future<void> _showErrorDialog(String message) async {
+  Future<void> _showErrorDialog(BuildContext context, String message) async {
     return showDialog<void>(
       context: context,
       barrierDismissible: false,
@@ -40,8 +31,10 @@ class _WeatherInfoScreenState extends State<WeatherInfoScreen> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final labelLargeStyle = Theme.of(context).textTheme.labelLarge;
+    final weatherProvider = ref.watch(weatherResponseNotifierProvider);
+
     return Scaffold(
       body: Center(
         child: FractionallySizedBox(
@@ -50,7 +43,7 @@ class _WeatherInfoScreenState extends State<WeatherInfoScreen> {
             children: [
               const Spacer(),
               WeatherConditionPanel(
-                weatherResponse: _weatherResponse,
+                weatherResponse: weatherProvider,
                 labelLargeStyle: labelLargeStyle,
               ),
               Expanded(
@@ -76,22 +69,25 @@ class _WeatherInfoScreenState extends State<WeatherInfoScreen> {
                           child: TextButton(
                             onPressed: () {
                               try {
-                                final requestJSON = WeatherRequest(
-                                  area: 'tokyo',
-                                  date: DateTime.now(),
-                                ).toJson();
-                                final response = _yumemiWeather
-                                    .fetchWeather(jsonEncode(requestJSON));
-                                setState(() {
-                                  _weatherResponse = WeatherResponse.fromJson(
-                                    jsonDecode(response)
-                                        as Map<String, dynamic>,
-                                  );
-                                });
+                                ref
+                                    .read(
+                                      weatherResponseNotifierProvider.notifier,
+                                    )
+                                    .fetch();
                               } on YumemiWeatherError catch (e) {
-                                unawaited(_showErrorDialog(e.toString()));
+                                unawaited(
+                                  _showErrorDialog(
+                                    context,
+                                    e.toString(),
+                                  ),
+                                );
                               } on FormatException catch (e) {
-                                unawaited(_showErrorDialog(e.toString()));
+                                unawaited(
+                                  _showErrorDialog(
+                                    context,
+                                    e.toString(),
+                                  ),
+                                );
                               }
                             },
                             child: Text(
