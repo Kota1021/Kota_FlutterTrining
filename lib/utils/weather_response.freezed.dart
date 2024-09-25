@@ -145,7 +145,6 @@ class __$$WeatherResponseImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-@WeatherKindConverter()
 @JsonSerializable(fieldRename: FieldRename.snake)
 class _$WeatherResponseImpl implements _WeatherResponse {
   const _$WeatherResponseImpl(
