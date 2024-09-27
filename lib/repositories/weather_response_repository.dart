@@ -21,28 +21,17 @@ class WeatherResponseRepository {
       : _yumemiWeather = yumemiweather;
   final YumemiWeather _yumemiWeather;
 
-  void fetch({
-    required void Function(WeatherResponse response) onSuccess,
-    required void Function(String error) onError,
-  }) {
-    try {
-      final requestJSON = WeatherRequest(
-        area: 'tokyo',
-        date: DateTime.now(),
-      ).toJson();
+  WeatherResponse fetch() {
+    final requestJSON = WeatherRequest(
+      area: 'tokyo',
+      date: DateTime.now(),
+    ).toJson();
 
-      final response = _yumemiWeather.fetchWeather(jsonEncode(requestJSON));
-      final weatherResponse = WeatherResponse.fromJson(
-        jsonDecode(response) as Map<String, dynamic>,
-      );
-      onSuccess(
-        weatherResponse,
-      );
-    } on YumemiWeatherError catch (e) {
-      onError(e.toString());
-    } on FormatException catch (e) {
-      onError(e.toString());
-    }
+    final response = _yumemiWeather.fetchWeather(jsonEncode(requestJSON));
+    final weatherResponse = WeatherResponse.fromJson(
+      jsonDecode(response) as Map<String, dynamic>,
+    );
+    return weatherResponse;
   }
 }
 
