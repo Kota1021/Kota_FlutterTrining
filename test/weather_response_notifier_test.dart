@@ -19,8 +19,6 @@ void main() {
         }
   ''';
 
-  when(mockClient.fetchWeather(any)).thenReturn(jsonString);
-
   late ProviderContainer container;
 
   setUpAll(() {
@@ -33,7 +31,9 @@ void main() {
     container.dispose();
   });
 
-  test('WeatherResponse', () {
+  test('success case: WeatherResponse', () {
+    when(mockClient.fetchWeather(any)).thenReturn(jsonString);
+
     final expected = WeatherResponse(
       weatherCondition: WeatherKind.cloudy,
       maxTemperature: 25,
@@ -51,5 +51,26 @@ void main() {
 
     final actualState = container.read(weatherResponseNotifierProvider);
     expect(actualState, expected);
+  });
+
+  test('failure case `invalidParameter`: WeatherResponse', () {
+    when(mockClient.fetchWeather(any))
+        .thenThrow(YumemiWeatherError.invalidParameter);
+
+    final expected = YumemiWeatherError.invalidParameter.toString();
+
+    container.read(weatherResponseNotifierProvider.notifier).fetch(
+          onError: (error) => {expect(error, expected)},
+        );
+  });
+
+  test('failure case `unknown`: WeatherResponse', () {
+    when(mockClient.fetchWeather(any)).thenThrow(YumemiWeatherError.unknown);
+
+    final expected = YumemiWeatherError.unknown.toString();
+
+    container.read(weatherResponseNotifierProvider.notifier).fetch(
+          onError: (error) => {expect(error, expected)},
+        );
   });
 }
