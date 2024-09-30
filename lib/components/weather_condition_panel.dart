@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_training/utils/weather_response.dart';
-import 'package:flutter_training/weather_kind.dart';
+import 'package:flutter_training/models/weather_kind.dart';
+import 'package:flutter_training/models/weather_response.dart';
 
 class WeatherConditionPanel extends StatelessWidget {
   const WeatherConditionPanel({
