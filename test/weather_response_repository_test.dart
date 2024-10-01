@@ -53,22 +53,18 @@ void main() {
     when(mockClient.fetchWeather(any))
         .thenThrow(YumemiWeatherError.invalidParameter);
 
-    const expected = YumemiWeatherError.invalidParameter;
-    try {
-      final _ = container.read(weatherResponseRepositoryProvider).fetch();
-    } on YumemiWeatherError catch (error) {
-      expect(error, expected);
-    }
+    expect(
+      container.read(weatherResponseRepositoryProvider).fetch,
+      throwsA(YumemiWeatherError.invalidParameter),
+    );
   });
 
   test('failure case `unknown`: WeatherResponse', () {
     when(mockClient.fetchWeather(any)).thenThrow(YumemiWeatherError.unknown);
 
-    const expected = YumemiWeatherError.unknown;
-    try {
-      final _ = container.read(weatherResponseRepositoryProvider).fetch();
-    } on YumemiWeatherError catch (error) {
-      expect(error, expected);
-    }
+    expect(
+      container.read(weatherResponseRepositoryProvider).fetch,
+      throwsA(YumemiWeatherError.unknown),
+    );
   });
 }

@@ -45,9 +45,7 @@ void main() {
         03,
       ),
     );
-    container.read(weatherResponseNotifierProvider.notifier).fetch(
-          onError: (error) => {},
-        );
+    container.read(weatherResponseNotifierProvider.notifier).fetch();
 
     final actualState = container.read(weatherResponseNotifierProvider);
     expect(actualState, expected);
@@ -56,21 +54,18 @@ void main() {
   test('failure case `invalidParameter`: WeatherResponse', () {
     when(mockClient.fetchWeather(any))
         .thenThrow(YumemiWeatherError.invalidParameter);
-
-    final expected = YumemiWeatherError.invalidParameter.toString();
-
-    container.read(weatherResponseNotifierProvider.notifier).fetch(
-          onError: (error) => {expect(error, expected)},
-        );
+    expect(
+      container.read(weatherResponseNotifierProvider.notifier).fetch,
+      throwsA(YumemiWeatherError.invalidParameter),
+    );
   });
 
   test('failure case `unknown`: WeatherResponse', () {
     when(mockClient.fetchWeather(any)).thenThrow(YumemiWeatherError.unknown);
 
-    final expected = YumemiWeatherError.unknown.toString();
-
-    container.read(weatherResponseNotifierProvider.notifier).fetch(
-          onError: (error) => {expect(error, expected)},
-        );
+    expect(
+      container.read(weatherResponseNotifierProvider.notifier).fetch,
+      throwsA(YumemiWeatherError.unknown),
+    );
   });
 }
