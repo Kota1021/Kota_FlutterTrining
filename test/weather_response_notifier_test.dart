@@ -51,21 +51,34 @@ void main() {
     expect(actualState, expected);
   });
 
-  test('failure case `invalidParameter`: WeatherResponse', () {
-    when(mockClient.fetchWeather(any))
-        .thenThrow(YumemiWeatherError.invalidParameter);
-    expect(
-      container.read(weatherResponseNotifierProvider.notifier).fetch,
-      throwsA(YumemiWeatherError.invalidParameter),
-    );
-  });
+  group(
+    'Failure cases: WeatherResponseNotifier',
+    () {
+      test(
+        'failure case `invalidParameter`: WeatherResponse',
+        () {
+          when(mockClient.fetchWeather(any))
+              .thenThrow(YumemiWeatherError.invalidParameter);
 
-  test('failure case `unknown`: WeatherResponse', () {
-    when(mockClient.fetchWeather(any)).thenThrow(YumemiWeatherError.unknown);
+          expect(
+            container.read(weatherResponseNotifierProvider.notifier).fetch,
+            throwsA(YumemiWeatherError.invalidParameter),
+          );
+        },
+      );
 
-    expect(
-      container.read(weatherResponseNotifierProvider.notifier).fetch,
-      throwsA(YumemiWeatherError.unknown),
-    );
-  });
+      test(
+        'failure case `unknown`: WeatherResponse',
+        () {
+          when(mockClient.fetchWeather(any))
+              .thenThrow(YumemiWeatherError.unknown);
+
+          expect(
+            container.read(weatherResponseNotifierProvider.notifier).fetch,
+            throwsA(YumemiWeatherError.unknown),
+          );
+        },
+      );
+    },
+  );
 }

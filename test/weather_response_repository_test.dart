@@ -30,41 +30,56 @@ void main() {
     container.dispose();
   });
 
-  test('success case: WeatherResponse', () {
-    when(mockClient.fetchWeather(any)).thenReturn(jsonString);
+  test(
+    'success case: WeatherResponse',
+    () {
+      when(mockClient.fetchWeather(any)).thenReturn(jsonString);
 
-    final expected = WeatherResponse(
-      weatherCondition: WeatherKind.cloudy,
-      maxTemperature: 25,
-      minTemperature: 7,
-      date: DateTime.utc(
-        2020,
-        04,
-        01,
-        03,
-      ),
-    );
-    final actual = container.read(weatherResponseRepositoryProvider).fetch();
+      final expected = WeatherResponse(
+        weatherCondition: WeatherKind.cloudy,
+        maxTemperature: 25,
+        minTemperature: 7,
+        date: DateTime.utc(
+          2020,
+          04,
+          01,
+          03,
+        ),
+      );
+      final actual = container.read(weatherResponseRepositoryProvider).fetch();
 
-    expect(actual, expected);
-  });
+      expect(actual, expected);
+    },
+  );
 
-  test('failure case `invalidParameter`: WeatherResponse', () {
-    when(mockClient.fetchWeather(any))
-        .thenThrow(YumemiWeatherError.invalidParameter);
+  group(
+    'Failure cases: WeatherResponseRepository',
+    () {
+      test(
+        'failure case `invalidParameter`: WeatherResponse',
+        () {
+          when(mockClient.fetchWeather(any))
+              .thenThrow(YumemiWeatherError.invalidParameter);
 
-    expect(
-      container.read(weatherResponseRepositoryProvider).fetch,
-      throwsA(YumemiWeatherError.invalidParameter),
-    );
-  });
+          expect(
+            container.read(weatherResponseRepositoryProvider).fetch,
+            throwsA(YumemiWeatherError.invalidParameter),
+          );
+        },
+      );
 
-  test('failure case `unknown`: WeatherResponse', () {
-    when(mockClient.fetchWeather(any)).thenThrow(YumemiWeatherError.unknown);
+      test(
+        'failure case `unknown`: WeatherResponse',
+        () {
+          when(mockClient.fetchWeather(any))
+              .thenThrow(YumemiWeatherError.unknown);
 
-    expect(
-      container.read(weatherResponseRepositoryProvider).fetch,
-      throwsA(YumemiWeatherError.unknown),
-    );
-  });
+          expect(
+            container.read(weatherResponseRepositoryProvider).fetch,
+            throwsA(YumemiWeatherError.unknown),
+          );
+        },
+      );
+    },
+  );
 }
