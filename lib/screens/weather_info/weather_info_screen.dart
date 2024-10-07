@@ -54,6 +54,7 @@ class WeatherInfoScreen extends ConsumerWidget {
                       children: [
                         Expanded(
                           child: TextButton(
+                            key: const Key('closeButton'),
                             onPressed: () {
                               Navigator.of(context).pop();
                             },
@@ -67,6 +68,7 @@ class WeatherInfoScreen extends ConsumerWidget {
                         ),
                         Expanded(
                           child: TextButton(
+                            key: const Key('reloadButton'),
                             onPressed: () {
                               try {
                                 ref
