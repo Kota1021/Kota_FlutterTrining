@@ -28,14 +28,14 @@ class WeatherConditionPanel extends StatelessWidget {
             children: [
               Expanded(
                 child: Text(
-                  '${_weatherResponse?.minTemperature.toString() ?? '** '} ℃',
+                  '${_weatherResponse?.minTemperature.toString() ?? '**'} ℃',
                   textAlign: TextAlign.center,
                   style: _labelLargeStyle?.copyWith(color: Colors.blue),
                 ),
               ),
               Expanded(
                 child: Text(
-                  '${_weatherResponse?.maxTemperature.toString() ?? '** '} ℃',
+                  '${_weatherResponse?.maxTemperature.toString() ?? '**'} ℃',
                   textAlign: TextAlign.center,
                   style: _labelLargeStyle?.copyWith(color: Colors.red),
                 ),
