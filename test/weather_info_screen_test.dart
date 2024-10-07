@@ -156,7 +156,7 @@ void main() {
       expect(find.byKey(const Key('closeButton')), findsOneWidget);
     });
 
-    testWidgets('check WeatherInfoScreen on error', (tester) async {
+    testWidgets('check WeatherInfoScreen on unknown error', (tester) async {
       when(
         mockYumemiWeather.fetchWeather(any),
       ).thenThrow(YumemiWeatherError.unknown);
@@ -176,11 +176,61 @@ void main() {
       final reloadButton = find.byKey(const Key('reloadButton'));
       expect(reloadButton, findsOneWidget);
 
+      // present error dialog
       await tester.tap(reloadButton);
       await tester.pump();
 
-      expect(find.byType(Dialog), findsOneWidget);
-      expect(find.text('Error occurred'), findsOneWidget);
+      final errorDialog = find.widgetWithText(
+        AlertDialog,
+        YumemiWeatherError.unknown.toString(),
+      );
+      expect(errorDialog, findsOneWidget);
+
+      // close error dialog
+      final confirmationButton = find.byKey(const Key('confirmationButton'));
+      expect(confirmationButton, findsOneWidget);
+      await tester.tap(confirmationButton);
+      await tester.pump();
+      expect(errorDialog, findsNothing);
+    });
+
+    testWidgets('check WeatherInfoScreen on invalidParameter error',
+        (tester) async {
+      when(
+        mockYumemiWeather.fetchWeather(any),
+      ).thenThrow(YumemiWeatherError.invalidParameter);
+
+      // Create the widget by telling the tester to build it.
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            yumemiWeatherClientProvider.overrideWithValue(mockYumemiWeather),
+          ],
+          child: const MaterialApp(
+            home: WeatherInfoScreen(),
+          ),
+        ),
+      );
+
+      final reloadButton = find.byKey(const Key('reloadButton'));
+      expect(reloadButton, findsOneWidget);
+
+      // present error dialog
+      await tester.tap(reloadButton);
+      await tester.pump();
+
+      final errorDialog = find.widgetWithText(
+        AlertDialog,
+        YumemiWeatherError.invalidParameter.toString(),
+      );
+      expect(errorDialog, findsOneWidget);
+
+      // close error dialog
+      final confirmationButton = find.byKey(const Key('confirmationButton'));
+      expect(confirmationButton, findsOneWidget);
+      await tester.tap(confirmationButton);
+      await tester.pump();
+      expect(errorDialog, findsNothing);
     });
   });
 }

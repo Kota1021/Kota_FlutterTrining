@@ -19,6 +19,7 @@ class WeatherInfoScreen extends ConsumerWidget {
           content: Text(message),
           actions: <Widget>[
             TextButton(
+              key: const Key('confirmationButton'),
               child: const Text('OK'),
               onPressed: () {
                 Navigator.of(context).pop();
