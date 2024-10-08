@@ -47,52 +47,52 @@ void main() {
   }
 
   setDisplaySize();
-  testWidgets('check WeatherInfoScreen before fetch', (tester) async {
-    await tester.pumpWidget(
-      const ProviderScope(
-        child: MaterialApp(
-          home: WeatherInfoScreen(),
-        ),
-      ),
-    );
-
-    expect(find.byType(Placeholder), findsOneWidget);
-    expect(find.text('** ℃'), findsNWidgets(2));
-    expect(find.byKey(const Key('closeButton')), findsOneWidget);
-    expect(find.byKey(const Key('reloadButton')), findsOneWidget);
-  });
-
-  testWidgets('check WeatherInfoScreen on sunny weather', (tester) async {
-    when(
-      mockYumemiWeather.fetchWeather(any),
-    ).thenAnswer(
-      (_) => sunnyJsonData,
-    );
-    // Create the widget by telling the tester to build it.
-    await tester.pumpWidget(
-      ProviderScope(
-        overrides: [
-          yumemiWeatherClientProvider.overrideWithValue(mockYumemiWeather),
-        ],
-        child: const MaterialApp(
-          home: WeatherInfoScreen(),
-        ),
-      ),
-    );
-
-    final reloadButton = find.byKey(const Key('reloadButton'));
-    expect(reloadButton, findsOneWidget);
-
-    await tester.tap(reloadButton);
-    await tester.pump();
-
-    expect(find.bySemanticsLabel(WeatherKindIcon.sunnyLabel), findsOneWidget);
-    expect(find.text('30 ℃'), findsOneWidget);
-    expect(find.text('15 ℃'), findsOneWidget);
-    expect(find.byKey(const Key('closeButton')), findsOneWidget);
-  });
-
   group('check WeatherInfoScreen', () {
+    testWidgets('check WeatherInfoScreen before fetch', (tester) async {
+      await tester.pumpWidget(
+        const ProviderScope(
+          child: MaterialApp(
+            home: WeatherInfoScreen(),
+          ),
+        ),
+      );
+
+      expect(find.byType(Placeholder), findsOneWidget);
+      expect(find.text('** ℃'), findsNWidgets(2));
+      expect(find.byKey(const Key('closeButton')), findsOneWidget);
+      expect(find.byKey(const Key('reloadButton')), findsOneWidget);
+    });
+
+    testWidgets('check WeatherInfoScreen on sunny weather', (tester) async {
+      when(
+        mockYumemiWeather.fetchWeather(any),
+      ).thenAnswer(
+        (_) => sunnyJsonData,
+      );
+      // Create the widget by telling the tester to build it.
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            yumemiWeatherClientProvider.overrideWithValue(mockYumemiWeather),
+          ],
+          child: const MaterialApp(
+            home: WeatherInfoScreen(),
+          ),
+        ),
+      );
+
+      final reloadButton = find.byKey(const Key('reloadButton'));
+      expect(reloadButton, findsOneWidget);
+
+      await tester.tap(reloadButton);
+      await tester.pump();
+
+      expect(find.bySemanticsLabel(WeatherKindIcon.sunnyLabel), findsOneWidget);
+      expect(find.text('30 ℃'), findsOneWidget);
+      expect(find.text('15 ℃'), findsOneWidget);
+      expect(find.byKey(const Key('closeButton')), findsOneWidget);
+    });
+
     testWidgets('check WeatherInfoScreen on cloudy weather', (tester) async {
       when(
         mockYumemiWeather.fetchWeather(any),
