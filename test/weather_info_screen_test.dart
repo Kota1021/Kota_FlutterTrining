@@ -46,16 +46,21 @@ void main() {
     binding.platformDispatcher.implicitView!.devicePixelRatio = 1;
   }
 
+  Future<void> pumpWidget(WidgetTester tester, List<Override> overrides) async {
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: overrides,
+        child: const MaterialApp(
+          home: WeatherInfoScreen(),
+        ),
+      ),
+    );
+  }
+
   setDisplaySize();
   group('check WeatherInfoScreen', () {
     testWidgets('check WeatherInfoScreen before fetch', (tester) async {
-      await tester.pumpWidget(
-        const ProviderScope(
-          child: MaterialApp(
-            home: WeatherInfoScreen(),
-          ),
-        ),
-      );
+      await pumpWidget(tester, []);
 
       expect(find.byType(Placeholder), findsOneWidget);
       expect(find.text('** ℃'), findsNWidgets(2));
@@ -70,15 +75,9 @@ void main() {
         (_) => sunnyJsonData,
       );
       // Create the widget by telling the tester to build it.
-      await tester.pumpWidget(
-        ProviderScope(
-          overrides: [
-            yumemiWeatherClientProvider.overrideWithValue(mockYumemiWeather),
-          ],
-          child: const MaterialApp(
-            home: WeatherInfoScreen(),
-          ),
-        ),
+      await pumpWidget(
+        tester,
+        [yumemiWeatherClientProvider.overrideWithValue(mockYumemiWeather)],
       );
 
       final reloadButton = find.byKey(WeatherInfoScreen.reloadButton);
@@ -100,15 +99,9 @@ void main() {
         (_) => cloudyJsonData,
       );
       // Create the widget by telling the tester to build it.
-      await tester.pumpWidget(
-        ProviderScope(
-          overrides: [
-            yumemiWeatherClientProvider.overrideWithValue(mockYumemiWeather),
-          ],
-          child: const MaterialApp(
-            home: WeatherInfoScreen(),
-          ),
-        ),
+      await pumpWidget(
+        tester,
+        [yumemiWeatherClientProvider.overrideWithValue(mockYumemiWeather)],
       );
 
       final reloadButton = find.byKey(WeatherInfoScreen.reloadButton);
@@ -133,15 +126,9 @@ void main() {
         (_) => rainyJsonData,
       );
       // Create the widget by telling the tester to build it.
-      await tester.pumpWidget(
-        ProviderScope(
-          overrides: [
-            yumemiWeatherClientProvider.overrideWithValue(mockYumemiWeather),
-          ],
-          child: const MaterialApp(
-            home: WeatherInfoScreen(),
-          ),
-        ),
+      await pumpWidget(
+        tester,
+        [yumemiWeatherClientProvider.overrideWithValue(mockYumemiWeather)],
       );
 
       final reloadButton = find.byKey(WeatherInfoScreen.reloadButton);
@@ -162,15 +149,9 @@ void main() {
       ).thenThrow(YumemiWeatherError.unknown);
 
       // Create the widget by telling the tester to build it.
-      await tester.pumpWidget(
-        ProviderScope(
-          overrides: [
-            yumemiWeatherClientProvider.overrideWithValue(mockYumemiWeather),
-          ],
-          child: const MaterialApp(
-            home: WeatherInfoScreen(),
-          ),
-        ),
+      await pumpWidget(
+        tester,
+        [yumemiWeatherClientProvider.overrideWithValue(mockYumemiWeather)],
       );
 
       final reloadButton = find.byKey(WeatherInfoScreen.reloadButton);
@@ -202,15 +183,9 @@ void main() {
       ).thenThrow(YumemiWeatherError.invalidParameter);
 
       // Create the widget by telling the tester to build it.
-      await tester.pumpWidget(
-        ProviderScope(
-          overrides: [
-            yumemiWeatherClientProvider.overrideWithValue(mockYumemiWeather),
-          ],
-          child: const MaterialApp(
-            home: WeatherInfoScreen(),
-          ),
-        ),
+      await pumpWidget(
+        tester,
+        [yumemiWeatherClientProvider.overrideWithValue(mockYumemiWeather)],
       );
 
       final reloadButton = find.byKey(WeatherInfoScreen.reloadButton);
