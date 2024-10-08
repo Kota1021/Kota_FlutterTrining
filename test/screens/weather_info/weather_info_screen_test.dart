@@ -7,7 +7,7 @@ import 'package:flutter_training/screens/weather_info/weather_info_screen.dart';
 import 'package:mockito/mockito.dart';
 import 'package:yumemi_weather/yumemi_weather.dart';
 
-import 'weather_response_notifier_test.mocks.dart';
+import 'notifier/weather_response_notifier_test.mocks.dart';
 
 void main() {
   final mockYumemiWeather = MockYumemiWeather();
