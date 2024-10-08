@@ -59,8 +59,8 @@ void main() {
 
       expect(find.byType(Placeholder), findsOneWidget);
       expect(find.text('** ℃'), findsNWidgets(2));
-      expect(find.byKey(const Key('closeButton')), findsOneWidget);
-      expect(find.byKey(const Key('reloadButton')), findsOneWidget);
+      expect(find.byKey(WeatherInfoScreen.closeButton), findsOneWidget);
+      expect(find.byKey(WeatherInfoScreen.reloadButton), findsOneWidget);
     });
 
     testWidgets('check WeatherInfoScreen on sunny weather', (tester) async {
@@ -81,7 +81,7 @@ void main() {
         ),
       );
 
-      final reloadButton = find.byKey(const Key('reloadButton'));
+      final reloadButton = find.byKey(WeatherInfoScreen.reloadButton);
       expect(reloadButton, findsOneWidget);
 
       await tester.tap(reloadButton);
@@ -90,7 +90,7 @@ void main() {
       expect(find.bySemanticsLabel(WeatherKindIcon.sunnyLabel), findsOneWidget);
       expect(find.text('30 ℃'), findsOneWidget);
       expect(find.text('15 ℃'), findsOneWidget);
-      expect(find.byKey(const Key('closeButton')), findsOneWidget);
+      expect(find.byKey(WeatherInfoScreen.closeButton), findsOneWidget);
     });
 
     testWidgets('check WeatherInfoScreen on cloudy weather', (tester) async {
@@ -111,7 +111,7 @@ void main() {
         ),
       );
 
-      final reloadButton = find.byKey(const Key('reloadButton'));
+      final reloadButton = find.byKey(WeatherInfoScreen.reloadButton);
       expect(reloadButton, findsOneWidget);
 
       await tester.tap(reloadButton);
@@ -123,7 +123,7 @@ void main() {
       );
       expect(find.text('20 ℃'), findsOneWidget);
       expect(find.text('10 ℃'), findsOneWidget);
-      expect(find.byKey(const Key('closeButton')), findsOneWidget);
+      expect(find.byKey(WeatherInfoScreen.closeButton), findsOneWidget);
     });
 
     testWidgets('check WeatherInfoScreen on rainy weather', (tester) async {
@@ -144,7 +144,7 @@ void main() {
         ),
       );
 
-      final reloadButton = find.byKey(const Key('reloadButton'));
+      final reloadButton = find.byKey(WeatherInfoScreen.reloadButton);
       expect(reloadButton, findsOneWidget);
 
       await tester.tap(reloadButton);
@@ -153,7 +153,7 @@ void main() {
       expect(find.bySemanticsLabel(WeatherKindIcon.rainyLabel), findsOneWidget);
       expect(find.text('15 ℃'), findsOneWidget);
       expect(find.text('5 ℃'), findsOneWidget);
-      expect(find.byKey(const Key('closeButton')), findsOneWidget);
+      expect(find.byKey(WeatherInfoScreen.closeButton), findsOneWidget);
     });
 
     testWidgets('check WeatherInfoScreen on unknown error', (tester) async {
@@ -173,7 +173,7 @@ void main() {
         ),
       );
 
-      final reloadButton = find.byKey(const Key('reloadButton'));
+      final reloadButton = find.byKey(WeatherInfoScreen.reloadButton);
       expect(reloadButton, findsOneWidget);
 
       // present error dialog
@@ -187,7 +187,8 @@ void main() {
       expect(errorDialog, findsOneWidget);
 
       // close error dialog
-      final confirmationButton = find.byKey(const Key('confirmationButton'));
+      final confirmationButton =
+          find.byKey(WeatherInfoScreen.confirmationButton);
       expect(confirmationButton, findsOneWidget);
       await tester.tap(confirmationButton);
       await tester.pump();
@@ -212,7 +213,7 @@ void main() {
         ),
       );
 
-      final reloadButton = find.byKey(const Key('reloadButton'));
+      final reloadButton = find.byKey(WeatherInfoScreen.reloadButton);
       expect(reloadButton, findsOneWidget);
 
       // present error dialog
@@ -226,7 +227,8 @@ void main() {
       expect(errorDialog, findsOneWidget);
 
       // close error dialog
-      final confirmationButton = find.byKey(const Key('confirmationButton'));
+      final confirmationButton =
+          find.byKey(WeatherInfoScreen.confirmationButton);
       expect(confirmationButton, findsOneWidget);
       await tester.tap(confirmationButton);
       await tester.pump();
