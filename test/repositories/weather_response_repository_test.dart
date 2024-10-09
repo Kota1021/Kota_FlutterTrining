@@ -32,7 +32,7 @@ void main() {
 
   test(
     'success case: WeatherResponse',
-    () {
+    () async {
       when(mockClient.fetchWeather(any)).thenReturn(jsonString);
 
       final expected = WeatherResponse(
@@ -46,7 +46,8 @@ void main() {
           03,
         ),
       );
-      final actual = container.read(weatherResponseRepositoryProvider).fetch();
+      final actual =
+          await container.read(weatherResponseRepositoryProvider).fetch();
 
       expect(actual, expected);
     },

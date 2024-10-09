@@ -31,7 +31,7 @@ void main() {
     container.dispose();
   });
 
-  test('success case: WeatherResponse', () {
+  test('success case: WeatherResponse', () async {
     when(mockClient.fetchWeather(any)).thenReturn(jsonString);
 
     final expected = WeatherResponse(
@@ -45,7 +45,7 @@ void main() {
         03,
       ),
     );
-    container.read(weatherResponseNotifierProvider.notifier).fetch();
+    await container.read(weatherResponseNotifierProvider.notifier).fetch();
 
     final actualState = container.read(weatherResponseNotifierProvider);
     expect(actualState, expected);

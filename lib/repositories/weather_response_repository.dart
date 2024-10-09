@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter_training/models/weather_request.dart';
 import 'package:flutter_training/models/weather_response.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -21,13 +22,16 @@ class WeatherResponseRepository {
       : _yumemiWeather = yumemiweather;
   final YumemiWeather _yumemiWeather;
 
-  WeatherResponse fetch() {
+  Future<WeatherResponse> fetch() async {
     final requestJSON = WeatherRequest(
       area: 'tokyo',
       date: DateTime.now(),
     ).toJson();
 
-    final response = _yumemiWeather.fetchWeather(jsonEncode(requestJSON));
+    final response = await compute(
+      _yumemiWeather.syncFetchWeather,
+      jsonEncode(requestJSON),
+    );
     final weatherResponse = WeatherResponse.fromJson(
       jsonDecode(response) as Map<String, dynamic>,
     );
