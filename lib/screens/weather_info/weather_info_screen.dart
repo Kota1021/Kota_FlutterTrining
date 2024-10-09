@@ -9,6 +9,15 @@ import 'package:yumemi_weather/yumemi_weather.dart';
 class WeatherInfoScreen extends ConsumerWidget {
   const WeatherInfoScreen({super.key});
 
+  @visibleForTesting
+  static const confirmationButton = Key('confirmationButton');
+
+  @visibleForTesting
+  static const closeButton = Key('closeButton');
+
+  @visibleForTesting
+  static const reloadButton = Key('reloadButton');
+
   Future<void> _showErrorDialog(BuildContext context, String message) async {
     return showDialog<void>(
       context: context,
@@ -19,6 +28,7 @@ class WeatherInfoScreen extends ConsumerWidget {
           content: Text(message),
           actions: <Widget>[
             TextButton(
+              key: confirmationButton,
               child: const Text('OK'),
               onPressed: () {
                 Navigator.of(context).pop();
@@ -54,6 +64,7 @@ class WeatherInfoScreen extends ConsumerWidget {
                       children: [
                         Expanded(
                           child: TextButton(
+                            key: closeButton,
                             onPressed: () {
                               Navigator.of(context).pop();
                             },
@@ -67,6 +78,7 @@ class WeatherInfoScreen extends ConsumerWidget {
                         ),
                         Expanded(
                           child: TextButton(
+                            key: reloadButton,
                             onPressed: () {
                               try {
                                 ref
