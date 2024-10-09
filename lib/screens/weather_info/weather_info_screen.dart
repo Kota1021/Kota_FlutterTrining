@@ -76,44 +76,48 @@ class WeatherInfoScreen extends ConsumerWidget {
                                   'Close',
                                   textAlign: TextAlign.center,
                                   style: labelLargeStyle?.copyWith(
-                                      color: Colors.blue),
+                                    color: Colors.blue,
+                                  ),
                                 ),
                               ),
                             ),
                             Expanded(
                               child: TextButton(
                                 key: reloadButton,
-                                onPressed: () {
+                                onPressed: () async {
                                   try {
-                                    unawaited(
-                                      ref
-                                          .read(
-                                            weatherResponseNotifierProvider
-                                                .notifier,
-                                          )
-                                          .fetch(),
-                                    );
+                                    await ref
+                                        .read(
+                                          weatherResponseNotifierProvider
+                                              .notifier,
+                                        )
+                                        .fetch();
                                   } on YumemiWeatherError catch (e) {
-                                    unawaited(
-                                      _showErrorDialog(
-                                        context,
-                                        e.toString(),
-                                      ),
-                                    );
+                                    if (context.mounted) {
+                                      unawaited(
+                                        _showErrorDialog(
+                                          context,
+                                          e.toString(),
+                                        ),
+                                      );
+                                    }
                                   } on FormatException catch (e) {
-                                    unawaited(
-                                      _showErrorDialog(
-                                        context,
-                                        e.toString(),
-                                      ),
-                                    );
+                                    if (context.mounted) {
+                                      unawaited(
+                                        _showErrorDialog(
+                                          context,
+                                          e.toString(),
+                                        ),
+                                      );
+                                    }
                                   }
                                 },
                                 child: Text(
                                   'Reload',
                                   textAlign: TextAlign.center,
                                   style: labelLargeStyle?.copyWith(
-                                      color: Colors.blue),
+                                    color: Colors.blue,
+                                  ),
                                 ),
                               ),
                             ),

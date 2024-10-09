@@ -13,7 +13,12 @@ class WeatherResponseNotifier extends _$WeatherResponseNotifier {
   WeatherResponse? build() => null;
   Future<void> fetch() async {
     ref.read(loadingStateNotifierProvider.notifier).startLoading();
-    state = await ref.read(weatherResponseRepositoryProvider).fetch();
-    ref.read(loadingStateNotifierProvider.notifier).stopLoading();
+    try {
+      state = await ref.read(weatherResponseRepositoryProvider).fetch();
+      ref.read(loadingStateNotifierProvider.notifier).stopLoading();
+    } catch (e) {
+      ref.read(loadingStateNotifierProvider.notifier).stopLoading();
+      rethrow;
+    }
   }
 }
