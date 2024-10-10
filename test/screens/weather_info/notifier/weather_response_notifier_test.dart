@@ -31,8 +31,20 @@ void main() {
     container.dispose();
   });
 
-  test('success case: WeatherResponse', () {
-    when(mockClient.fetchWeather(any)).thenReturn(jsonString);
+  test('success case: WeatherResponse', () async {
+    when(mockClient.syncFetchWeather(any)).thenReturn(jsonString);
+    /*
+https://riverpod.dev/ja/docs/essentials/testing#%E3%83%A6%E3%83%8B%E3%83%83%E3%83%88%E3%83%86%E3%82%B9%E3%83%88
+
+provider が自動破棄される場合は、container.readの使用に注意してください。 
+provider がリッスンされていない場合、テストの途中でその状態が破棄される可能性があります。
+
+その場合は、container.listenの使用を検討してください。 
+この戻り値を使用すると、provider の現在の値を読み取ることができますが、
+テストの途中で provider が破棄されないことも保証されます:
+     */
+    final weatherResponseNotifierProviderHolder =
+        container.listen(weatherResponseNotifierProvider, (_, __) {});
 
     final expected = WeatherResponse(
       weatherCondition: WeatherKind.cloudy,
@@ -45,9 +57,8 @@ void main() {
         03,
       ),
     );
-    container.read(weatherResponseNotifierProvider.notifier).fetch();
-
-    final actualState = container.read(weatherResponseNotifierProvider);
+    await container.read(weatherResponseNotifierProvider.notifier).fetch();
+    final actualState = weatherResponseNotifierProviderHolder.read();
     expect(actualState, expected);
   });
 
@@ -57,7 +68,7 @@ void main() {
       test(
         'failure case `invalidParameter`: WeatherResponse',
         () {
-          when(mockClient.fetchWeather(any))
+          when(mockClient.syncFetchWeather(any))
               .thenThrow(YumemiWeatherError.invalidParameter);
 
           expect(
@@ -70,7 +81,7 @@ void main() {
       test(
         'failure case `unknown`: WeatherResponse',
         () {
-          when(mockClient.fetchWeather(any))
+          when(mockClient.syncFetchWeather(any))
               .thenThrow(YumemiWeatherError.unknown);
 
           expect(

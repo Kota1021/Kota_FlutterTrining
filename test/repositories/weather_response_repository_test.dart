@@ -32,8 +32,8 @@ void main() {
 
   test(
     'success case: WeatherResponse',
-    () {
-      when(mockClient.fetchWeather(any)).thenReturn(jsonString);
+    () async {
+      when(mockClient.syncFetchWeather(any)).thenReturn(jsonString);
 
       final expected = WeatherResponse(
         weatherCondition: WeatherKind.cloudy,
@@ -46,7 +46,8 @@ void main() {
           03,
         ),
       );
-      final actual = container.read(weatherResponseRepositoryProvider).fetch();
+      final actual =
+          await container.read(weatherResponseRepositoryProvider).fetch();
 
       expect(actual, expected);
     },
@@ -58,7 +59,7 @@ void main() {
       test(
         'failure case `invalidParameter`: WeatherResponse',
         () {
-          when(mockClient.fetchWeather(any))
+          when(mockClient.syncFetchWeather(any))
               .thenThrow(YumemiWeatherError.invalidParameter);
 
           expect(
@@ -71,7 +72,7 @@ void main() {
       test(
         'failure case `unknown`: WeatherResponse',
         () {
-          when(mockClient.fetchWeather(any))
+          when(mockClient.syncFetchWeather(any))
               .thenThrow(YumemiWeatherError.unknown);
 
           expect(

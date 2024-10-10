@@ -1,42 +1,41 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_training/models/weather_kind.dart';
+import 'package:flutter_training/models/weather_response.dart';
 import 'package:flutter_training/repositories/weather_response_repository.dart';
 import 'package:flutter_training/screens/weather_info/weather_info_screen.dart';
+import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:yumemi_weather/yumemi_weather.dart';
 
-import 'notifier/weather_response_notifier_test.mocks.dart';
+import 'weather_info_screen_test.mocks.dart';
 
+@GenerateNiceMocks([MockSpec<WeatherResponseRepository>()])
 void main() {
-  final mockYumemiWeather = MockYumemiWeather();
-  const sunnyJsonData = '''
-        {
-          "weather_condition": "sunny",
-          "max_temperature": 30, 
-          "min_temperature": 15,
-          "date": "2024-06-19T00:00:00.000"
-        }
-        ''';
+  final mockRepository = MockWeatherResponseRepository();
+  final sunnyWeather = WeatherResponse(
+    weatherCondition: WeatherKind.sunny,
+    maxTemperature: 30,
+    minTemperature: 15,
+    date: DateTime.utc(2024, 6, 19),
+  );
 
-  const cloudyJsonData = '''
-        {
-          "weather_condition": "cloudy",
-          "max_temperature": 20, 
-          "min_temperature": 10,
-          "date": "2024-06-19T00:00:00.000"
-        }
-        ''';
+  final cloudyWeather = WeatherResponse(
+    weatherCondition: WeatherKind.cloudy,
+    maxTemperature: 20,
+    minTemperature: 10,
+    date: DateTime.utc(2024, 6, 19),
+  );
 
-  const rainyJsonData = '''
-        {
-          "weather_condition": "rainy",
-          "max_temperature": 15, 
-          "min_temperature": 5,
-          "date": "2024-06-19T00:00:00.000"
-        }
-        ''';
+  final rainyWeather = WeatherResponse(
+    weatherCondition: WeatherKind.rainy,
+    maxTemperature: 15,
+    minTemperature: 5,
+    date: DateTime.utc(2024, 6, 19),
+  );
 
   final binding = TestWidgetsFlutterBinding.ensureInitialized();
   void setDisplaySize({
@@ -69,21 +68,26 @@ void main() {
     });
 
     testWidgets('check WeatherInfoScreen on sunny weather', (tester) async {
+      final completer = Completer<WeatherResponse>();
       when(
-        mockYumemiWeather.fetchWeather(any),
+        mockRepository.fetch(),
       ).thenAnswer(
-        (_) => sunnyJsonData,
+        (_) => completer.future,
       );
       // Create the widget by telling the tester to build it.
       await pumpWidget(
         tester,
-        [yumemiWeatherClientProvider.overrideWithValue(mockYumemiWeather)],
+        [weatherResponseRepositoryProvider.overrideWithValue(mockRepository)],
       );
 
       final reloadButton = find.byKey(WeatherInfoScreen.reloadButton);
       expect(reloadButton, findsOneWidget);
 
       await tester.tap(reloadButton);
+      await tester.pump();
+      expect(find.byType(CircularProgressIndicator), findsOneWidget);
+
+      completer.complete(sunnyWeather);
       await tester.pump();
 
       expect(find.bySemanticsLabel(WeatherKindIcon.sunnyLabel), findsOneWidget);
@@ -93,21 +97,26 @@ void main() {
     });
 
     testWidgets('check WeatherInfoScreen on cloudy weather', (tester) async {
+      final completer = Completer<WeatherResponse>();
       when(
-        mockYumemiWeather.fetchWeather(any),
+        mockRepository.fetch(),
       ).thenAnswer(
-        (_) => cloudyJsonData,
+        (_) => completer.future,
       );
       // Create the widget by telling the tester to build it.
       await pumpWidget(
         tester,
-        [yumemiWeatherClientProvider.overrideWithValue(mockYumemiWeather)],
+        [weatherResponseRepositoryProvider.overrideWithValue(mockRepository)],
       );
 
       final reloadButton = find.byKey(WeatherInfoScreen.reloadButton);
       expect(reloadButton, findsOneWidget);
 
       await tester.tap(reloadButton);
+      await tester.pump();
+      expect(find.byType(CircularProgressIndicator), findsOneWidget);
+
+      completer.complete(cloudyWeather);
       await tester.pump();
 
       expect(
@@ -120,15 +129,16 @@ void main() {
     });
 
     testWidgets('check WeatherInfoScreen on rainy weather', (tester) async {
+      final completer = Completer<WeatherResponse>();
       when(
-        mockYumemiWeather.fetchWeather(any),
+        mockRepository.fetch(),
       ).thenAnswer(
-        (_) => rainyJsonData,
+        (_) => completer.future,
       );
       // Create the widget by telling the tester to build it.
       await pumpWidget(
         tester,
-        [yumemiWeatherClientProvider.overrideWithValue(mockYumemiWeather)],
+        [weatherResponseRepositoryProvider.overrideWithValue(mockRepository)],
       );
 
       final reloadButton = find.byKey(WeatherInfoScreen.reloadButton);
@@ -136,7 +146,10 @@ void main() {
 
       await tester.tap(reloadButton);
       await tester.pump();
+      expect(find.byType(CircularProgressIndicator), findsOneWidget);
 
+      completer.complete(rainyWeather);
+      await tester.pump();
       expect(find.bySemanticsLabel(WeatherKindIcon.rainyLabel), findsOneWidget);
       expect(find.text('15 ℃'), findsOneWidget);
       expect(find.text('5 ℃'), findsOneWidget);
@@ -144,14 +157,16 @@ void main() {
     });
 
     testWidgets('check WeatherInfoScreen on unknown error', (tester) async {
+      final completer = Completer<WeatherResponse>();
       when(
-        mockYumemiWeather.fetchWeather(any),
-      ).thenThrow(YumemiWeatherError.unknown);
-
+        mockRepository.fetch(),
+      ).thenAnswer(
+        (_) => completer.future,
+      );
       // Create the widget by telling the tester to build it.
       await pumpWidget(
         tester,
-        [yumemiWeatherClientProvider.overrideWithValue(mockYumemiWeather)],
+        [weatherResponseRepositoryProvider.overrideWithValue(mockRepository)],
       );
 
       final reloadButton = find.byKey(WeatherInfoScreen.reloadButton);
@@ -159,6 +174,10 @@ void main() {
 
       // present error dialog
       await tester.tap(reloadButton);
+      await tester.pump();
+      expect(find.byType(CircularProgressIndicator), findsOneWidget);
+
+      completer.completeError(YumemiWeatherError.unknown);
       await tester.pump();
 
       final errorDialog = find.widgetWithText(
@@ -178,14 +197,16 @@ void main() {
 
     testWidgets('check WeatherInfoScreen on invalidParameter error',
         (tester) async {
+      final completer = Completer<WeatherResponse>();
       when(
-        mockYumemiWeather.fetchWeather(any),
-      ).thenThrow(YumemiWeatherError.invalidParameter);
-
+        mockRepository.fetch(),
+      ).thenAnswer(
+        (_) => completer.future,
+      );
       // Create the widget by telling the tester to build it.
       await pumpWidget(
         tester,
-        [yumemiWeatherClientProvider.overrideWithValue(mockYumemiWeather)],
+        [weatherResponseRepositoryProvider.overrideWithValue(mockRepository)],
       );
 
       final reloadButton = find.byKey(WeatherInfoScreen.reloadButton);
@@ -193,6 +214,10 @@ void main() {
 
       // present error dialog
       await tester.tap(reloadButton);
+      await tester.pump();
+      expect(find.byType(CircularProgressIndicator), findsOneWidget);
+
+      completer.completeError(YumemiWeatherError.invalidParameter);
       await tester.pump();
 
       final errorDialog = find.widgetWithText(
